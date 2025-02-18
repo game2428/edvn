@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDVN Token Exchange</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .button {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #3700b3;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        .input-group input {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background-color: #333;
+            color: white;
+            width: 200px;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #6200ea;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>edevanepay</h1>
+        <div id="main-screen">
+            <button class="button" onclick="showBuyScreen()">Купить EDVN</button>
+            <button class="button" onclick="showSellScreen()">Продать EDVN</button>
+        </div>
+        <div id="buy-screen" class="hidden">
+            <div class="input-group">
+                <input type="number" id="buy-amount" placeholder="Количество EDVN" min="10">
+            </div>
+            <button class="button" onclick="processBuy()">Продолжить</button>
+            <button class="button" onclick="returnToMain()">Отмена</button>
+        </div>
+        <div id="sell-screen" class="hidden">
+            <div class="input-group">
+                <input type="number" id="sell-amount" placeholder="Количество EDVN" min="10">
+            </div>
+            <button class="button" onclick="processSell()">Продолжить</button>
+            <button class="button" onclick="returnToMain()">Отмена</button>
+        </div>
+        <div id="confirmation-screen" class="hidden">
+            <p id="confirmation-message"></p>
+            <a id="exchange-link" class="button" target="_blank">Обменять</a>
+            <button class="button" onclick="returnToMain()">Отмена</button>
+        </div>
+    </div>
+
+    <script>
+        function showBuyScreen() {
+            document.getElementById('main-screen').classList.add('hidden');
+            document.getElementById('buy-screen').classList.remove('hidden');
+        }
+
+        function showSellScreen() {
+            document.getElementById('main-screen').classList.add('hidden');
+            document.getElementById('sell-screen').classList.remove('hidden');
+        }
+
+        function processBuy() {
+            const amount = document.getElementById('buy-amount').value;
+            if (amount >= 10) {
+                document.getElementById('buy-screen').classList.add('hidden');
+                document.getElementById('confirmation-screen').classList.remove('hidden');
+                document.getElementById('confirmation-message').innerText = `Вы хотите купить ${amount} EDVN.`;
+                document.getElementById('exchange-link').href = `https://t.me/edvntestbot?start=buy_${amount}`;
+            } else {
+                alert('Минимальное количество для покупки - 10 EDVN.');
+            }
+        }
+
+        function processSell() {
+            const amount = document.getElementById('sell-amount').value;
+            if (amount >= 10) {
+                document.getElementById('sell-screen').classList.add('hidden');
+                document.getElementById('confirmation-screen').classList.remove('hidden');
+                document.getElementById('confirmation-message').innerText = `Вы хотите продать ${amount} EDVN.`;
+                document.getElementById('exchange-link').href = `https://t.me/edvntestbot?start=sell_${amount}`;
+            } else {
+                alert('Минимальное количество для продажи - 10 EDVN.');
+            }
+        }
+
+        function returnToMain() {
+            document.getElementById('buy-screen').classList.add('hidden');
+            document.getElementById('sell-screen').classList.add('hidden');
+            document.getElementById('confirmation-screen').classList.add('hidden');
+            document.getElementById('main-screen').classList.remove('hidden');
+            document.getElementById('buy-amount').value = '';
+            document.getElementById('sell-amount').value = '';
+        }
+    </script>
+</body>
+</html>
+<style>
+
+</style>
+<script>
+
+</script>
