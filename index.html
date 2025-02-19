@@ -1,142 +1,365 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDVN Token Exchange</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            text-align: center;
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        .button {
-            background-color: #6200ea;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        .button:hover {
-            background-color: #3700b3;
-        }
-        .input-group {
-            margin: 20px 0;
-        }
-        .input-group input {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #333;
-            background-color: #333;
-            color: white;
-            width: 200px;
-        }
-        .input-group input:focus {
-            outline: none;
-            border-color: #6200ea;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDVN Token Exchange</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7c4dff;
+      --primary-hover: #651fff;
+      --background: #1a1a1a;
+      --surface: #252525;
+      --text: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(124, 77, 255, 0.1), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(124, 77, 255, 0.1), transparent 30%);
+      animation: bg-pan 20s infinite alternate;
+    }
+    @keyframes bg-pan {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 100%; }
+    }
+
+    /* Заголовок */
+    .page-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .page-header h1 {
+      font-size: 3rem;
+      background: linear-gradient(45deg, var(--primary), #3a1cff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: text-glow 2s infinite alternate;
+    }
+    @keyframes text-glow {
+      0% { text-shadow: 0 0 10px rgba(124, 77, 255, 0.5); }
+      100% { text-shadow: 0 0 20px rgba(124, 77, 255, 0.8); }
+    }
+
+    /* Контейнер для экранов */
+    .container {
+      background: var(--surface);
+      width: 95%;
+      max-width: 1200px;
+      height: 80vh;
+      position: relative;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(124, 77, 255, 0.1), transparent);
+      animation: rotate 6s linear infinite;
+    }
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Экраны внутри контейнера */
+    .screen {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 90%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .screen.active-screen {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .hidden {
+      display: none;
+    }
+
+    .input-group {
+      margin: 1.5rem 0;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(124, 77, 255, 0.05);
+      box-shadow: 0 0 16px rgba(124, 77, 255, 0.2);
+    }
+    .confirmation-message {
+      font-size: 1.2rem;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Кнопки */
+    .button {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(124, 77, 255, 0.3);
+      margin: 0.5rem;
+    }
+    .button::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.3s ease;
+    }
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(124, 77, 255, 0.5);
+    }
+    .button:hover::after {
+      left: 150%;
+    }
+
+    /* Группа кнопок */
+    .controls {
+      width: 95%;
+      max-width: 1200px;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .control-group.hidden {
+      display: none;
+    }
+    .control-group.active {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Toast-уведомление */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff4444;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      animation: slideUp 0.3s ease;
+      z-index: 1000;
+    }
+    @keyframes slideUp {
+      from { bottom: -50px; opacity: 0; }
+      to { bottom: 20px; opacity: 1; }
+    }
+
+    /* Оптимизация для мобильных устройств */
+    @media (max-width: 600px) {
+      .page-header h1 {
+        font-size: 2.2rem;
+      }
+      .container {
+        height: 70vh;
+        border-radius: 12px;
+      }
+      .input-group input {
+        padding: 0.8rem;
+        font-size: 1rem;
+      }
+      .button {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+        margin: 0.3rem;
+      }
+      .controls {
+        gap: 0.5rem;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .control-group.active {
+        flex-direction: column;
+      }
+      .screen {
+        width: 95%;
+      }
+    }
+    @media (max-width: 400px) {
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+      .button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      .confirmation-message {
+        font-size: 1rem;
+        padding: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>edevanepay</h1>
-        <div id="main-screen">
-            <button class="button" onclick="showBuyScreen()">Купить EDVN</button>
-            <button class="button" onclick="showSellScreen()">Продать EDVN</button>
-        </div>
-        <div id="buy-screen" class="hidden">
-            <div class="input-group">
-                <input type="number" id="buy-amount" placeholder="Количество EDVN" min="10">
-            </div>
-            <button class="button" onclick="processBuy()">Продолжить</button>
-            <button class="button" onclick="returnToMain()">Отмена</button>
-        </div>
-        <div id="sell-screen" class="hidden">
-            <div class="input-group">
-                <input type="number" id="sell-amount" placeholder="Количество EDVN" min="10">
-            </div>
-            <button class="button" onclick="processSell()">Продолжить</button>
-            <button class="button" onclick="returnToMain()">Отмена</button>
-        </div>
-        <div id="confirmation-screen" class="hidden">
-            <p id="confirmation-message"></p>
-            <a id="exchange-link" class="button" target="_blank">Обменять</a>
-            <button class="button" onclick="returnToMain()">Отмена</button>
-        </div>
+  <!-- Заголовок -->
+  <header class="page-header">
+    <h1>EDVN Exchange</h1>
+  </header>
+
+  <!-- Контейнер с динамическим контентом -->
+  <div class="container">
+    <!-- Основной экран -->
+    <div id="main-screen" class="screen active-screen">
+      <p style="font-size:1.5rem;">Выберите действие:</p>
     </div>
+    <!-- Экран покупки -->
+    <div id="buy-screen" class="screen hidden">
+      <div class="input-group">
+        <input type="number" id="buy-amount" placeholder="Количество EDVN" min="10">
+      </div>
+    </div>
+    <!-- Экран продажи -->
+    <div id="sell-screen" class="screen hidden">
+      <div class="input-group">
+        <input type="number" id="sell-amount" placeholder="Количество EDVN" min="10">
+      </div>
+    </div>
+    <!-- Экран подтверждения -->
+    <div id="confirmation-screen" class="screen hidden">
+      <p class="confirmation-message" id="confirmation-text"></p>
+    </div>
+  </div>
 
-    <script>
-        function showBuyScreen() {
-            document.getElementById('main-screen').classList.add('hidden');
-            document.getElementById('buy-screen').classList.remove('hidden');
-        }
+  <!-- Блок с кнопками -->
+  <div class="controls">
+    <!-- Кнопки главного экрана -->
+    <div id="main-buttons" class="control-group active">
+      <button class="button" onclick="showScreen('buy-screen')">Купить EDVN</button>
+      <button class="button" onclick="showScreen('sell-screen')">Продать EDVN</button>
+    </div>
+    <!-- Кнопки для экрана покупки -->
+    <div id="buy-buttons" class="control-group hidden">
+      <button class="button" onclick="processTransaction('buy')">Продолжить</button>
+      <button class="button" onclick="showScreen('main-screen')">Отмена</button>
+    </div>
+    <!-- Кнопки для экрана продажи -->
+    <div id="sell-buttons" class="control-group hidden">
+      <button class="button" onclick="processTransaction('sell')">Продолжить</button>
+      <button class="button" onclick="showScreen('main-screen')">Отмена</button>
+    </div>
+    <!-- Кнопки для экрана подтверждения -->
+    <div id="confirmation-buttons" class="control-group hidden">
+      <a id="exchange-link" class="button" target="_blank">Обменять</a>
+      <button class="button" onclick="showScreen('main-screen')">Отмена</button>
+    </div>
+  </div>
 
-        function showSellScreen() {
-            document.getElementById('main-screen').classList.add('hidden');
-            document.getElementById('sell-screen').classList.remove('hidden');
-        }
+  <script>
+    // Переключение экранов и групп кнопок
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active-screen');
+        screen.classList.add('hidden');
+      });
+      document.querySelectorAll('.control-group').forEach(ctrl => {
+        ctrl.classList.remove('active');
+        ctrl.classList.add('hidden');
+      });
+      const targetScreen = document.getElementById(screenId);
+      targetScreen.classList.remove('hidden');
+      targetScreen.classList.add('active-screen');
+      
+      const mapping = {
+        'main-screen': 'main-buttons',
+        'buy-screen': 'buy-buttons',
+        'sell-screen': 'sell-buttons',
+        'confirmation-screen': 'confirmation-buttons'
+      };
+      const ctrlId = mapping[screenId];
+      if (ctrlId) {
+        const targetCtrl = document.getElementById(ctrlId);
+        targetCtrl.classList.remove('hidden');
+        targetCtrl.classList.add('active');
+      }
+    }
 
-        function processBuy() {
-            const amount = document.getElementById('buy-amount').value;
-            if (amount >= 10) {
-                document.getElementById('buy-screen').classList.add('hidden');
-                document.getElementById('confirmation-screen').classList.remove('hidden');
-                document.getElementById('confirmation-message').innerText = `Вы хотите купить ${amount} EDVN.`;
-                document.getElementById('exchange-link').href = `https://t.me/edvntestbot?start=buy_${amount}`;
-            } else {
-                alert('Минимальное количество для покупки - 10 EDVN.');
-            }
-        }
+    // Обработка транзакций покупки/продажи
+    function processTransaction(type) {
+      const amountInput = document.getElementById(`${type}-amount`);
+      const amount = parseInt(amountInput.value);
+      if (amount >= 10) {
+        document.getElementById('confirmation-text').textContent =
+          `Вы точно хотите ${type === 'buy' ? 'купить' : 'продать'} ${amount} EDVN?`;
+        document.getElementById('exchange-link').href =
+          `https://t.me/edvntestbot?start=${type}_${amount}`;
+        showScreen('confirmation-screen');
+      } else {
+        showToast('Минимальное количество - 10 EDVN');
+      }
+    }
 
-        function processSell() {
-            const amount = document.getElementById('sell-amount').value;
-            if (amount >= 10) {
-                document.getElementById('sell-screen').classList.add('hidden');
-                document.getElementById('confirmation-screen').classList.remove('hidden');
-                document.getElementById('confirmation-message').innerText = `Вы хотите продать ${amount} EDVN.`;
-                document.getElementById('exchange-link').href = `https://t.me/edvntestbot?start=sell_${amount}`;
-            } else {
-                alert('Минимальное количество для продажи - 10 EDVN.');
-            }
-        }
-
-        function returnToMain() {
-            document.getElementById('buy-screen').classList.add('hidden');
-            document.getElementById('sell-screen').classList.add('hidden');
-            document.getElementById('confirmation-screen').classList.add('hidden');
-            document.getElementById('main-screen').classList.remove('hidden');
-            document.getElementById('buy-amount').value = '';
-            document.getElementById('sell-amount').value = '';
-        }
-    </script>
+    // Функция для отображения уведомления
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+  </script>
 </body>
 </html>
-<style>
-
-</style>
-<script>
-
-</script>
