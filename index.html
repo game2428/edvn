@@ -12,6 +12,9 @@
       --background: #1a1a1a;
       --surface: #252525;
       --text: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --success: #00c853;
+      --error: #ff4444;
     }
 
     * {
@@ -42,7 +45,7 @@
     /* Заголовок */
     .page-header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 40px;
     }
     .page-header h1 {
       font-size: 3rem;
@@ -50,6 +53,11 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: text-glow 2s infinite alternate;
+      margin-bottom: 10px;
+    }
+    .page-header p {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
     }
     @keyframes text-glow {
       0% { text-shadow: 0 0 10px rgba(124, 77, 255, 0.5); }
@@ -67,6 +75,10 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       overflow: hidden;
       margin-bottom: 20px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .container::before {
       content: '';
@@ -135,6 +147,22 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Анимированный показ курса токена */
+    .token-price-container {
+      margin-top: 1rem;
+    }
+    .token-price {
+      font-size: 1.5rem;
+      background: linear-gradient(45deg, var(--primary), var(--primary-hover));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: price-pulse 3s infinite;
+    }
+    @keyframes price-pulse {
+      0%, 100% { transform: scale(1); text-shadow: 0 0 10px rgba(124, 77, 255, 0.5); }
+      50% { transform: scale(1.05); text-shadow: 0 0 20px rgba(124, 77, 255, 0.8); }
+    }
+
     /* Кнопки */
     .button {
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
@@ -195,7 +223,7 @@
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: #ff4444;
+      background: var(--error);
       color: white;
       padding: 1rem 2rem;
       border-radius: 8px;
@@ -256,6 +284,7 @@
   <!-- Заголовок -->
   <header class="page-header">
     <h1>EDVN Exchange</h1>
+    <p>Быстрый и безопасный обмен токенов</p>
   </header>
 
   <!-- Контейнер с динамическим контентом -->
@@ -263,6 +292,10 @@
     <!-- Основной экран -->
     <div id="main-screen" class="screen active-screen">
       <p style="font-size:1.5rem;">Выберите действие:</p>
+      <!-- Анимированный показ курса токена -->
+      <div class="token-price-container">
+        <p class="token-price">Курс токена: $0.01</p>
+      </div>
     </div>
     <!-- Экран покупки -->
     <div id="buy-screen" class="screen hidden">
