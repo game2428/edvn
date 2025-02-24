@@ -16,13 +16,11 @@
       --success: #00c853;
       --error: #ff4444;
     }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
     body {
       font-family: 'Roboto', sans-serif;
       background: var(--background);
@@ -41,8 +39,6 @@
       0% { background-position: 0% 0%; }
       100% { background-position: 100% 100%; }
     }
-
-    /* Заголовок */
     .page-header {
       text-align: center;
       margin-bottom: 40px;
@@ -63,8 +59,6 @@
       0% { text-shadow: 0 0 10px rgba(124, 77, 255, 0.5); }
       100% { text-shadow: 0 0 20px rgba(124, 77, 255, 0.8); }
     }
-
-    /* Контейнер для экранов */
     .container {
       background: var(--surface);
       width: 95%;
@@ -94,8 +88,6 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
-    /* Экраны внутри контейнера */
     .screen {
       position: absolute;
       top: 50%;
@@ -114,7 +106,6 @@
     .hidden {
       display: none;
     }
-
     .input-group {
       margin: 1.5rem 0;
     }
@@ -146,8 +137,6 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    /* Анимированный показ курса токена */
     .token-price-container {
       margin-top: 1rem;
     }
@@ -162,8 +151,6 @@
       0%, 100% { transform: scale(1); text-shadow: 0 0 10px rgba(124, 77, 255, 0.5); }
       50% { transform: scale(1.05); text-shadow: 0 0 20px rgba(124, 77, 255, 0.8); }
     }
-
-    /* Кнопки */
     .button {
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       border: none;
@@ -196,8 +183,6 @@
     .button:hover::after {
       left: 150%;
     }
-
-    /* Группа кнопок */
     .controls {
       width: 95%;
       max-width: 1200px;
@@ -216,8 +201,6 @@
       gap: 1rem;
       flex-wrap: wrap;
     }
-
-    /* Toast-уведомление */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -234,8 +217,6 @@
       from { bottom: -50px; opacity: 0; }
       to { bottom: 20px; opacity: 1; }
     }
-
-    /* Оптимизация для мобильных устройств */
     @media (max-width: 600px) {
       .page-header h1 {
         font-size: 2.2rem;
@@ -292,7 +273,6 @@
     <!-- Основной экран -->
     <div id="main-screen" class="screen active-screen">
       <p style="font-size:1.5rem;">Выберите действие:</p>
-      <!-- Анимированный показ курса токена -->
       <div class="token-price-container">
         <p class="token-price">Курс токена: $0.01</p>
       </div>
@@ -300,13 +280,29 @@
     <!-- Экран покупки -->
     <div id="buy-screen" class="screen hidden">
       <div class="input-group">
-        <input type="number" id="buy-amount" placeholder="Количество EDVN" min="10">
+        <input 
+          type="number" 
+          id="buy-amount" 
+          placeholder="Количество EDVN" 
+          min="10"
+          inputmode="numeric" 
+          pattern="[0-9]*" 
+          oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+          onkeydown="if(event.key === 'Enter') { processTransaction('buy'); }">
       </div>
     </div>
     <!-- Экран продажи -->
     <div id="sell-screen" class="screen hidden">
       <div class="input-group">
-        <input type="number" id="sell-amount" placeholder="Количество EDVN" min="10">
+        <input 
+          type="number" 
+          id="sell-amount" 
+          placeholder="Количество EDVN" 
+          min="10"
+          inputmode="numeric" 
+          pattern="[0-9]*" 
+          oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+          onkeydown="if(event.key === 'Enter') { processTransaction('sell'); }">
       </div>
     </div>
     <!-- Экран подтверждения -->
@@ -317,22 +313,18 @@
 
   <!-- Блок с кнопками -->
   <div class="controls">
-    <!-- Кнопки главного экрана -->
     <div id="main-buttons" class="control-group active">
       <button class="button" onclick="showScreen('buy-screen')">Купить EDVN</button>
       <button class="button" onclick="showScreen('sell-screen')">Продать EDVN</button>
     </div>
-    <!-- Кнопки для экрана покупки -->
     <div id="buy-buttons" class="control-group hidden">
       <button class="button" onclick="processTransaction('buy')">Продолжить</button>
       <button class="button" onclick="showScreen('main-screen')">Отмена</button>
     </div>
-    <!-- Кнопки для экрана продажи -->
     <div id="sell-buttons" class="control-group hidden">
       <button class="button" onclick="processTransaction('sell')">Продолжить</button>
       <button class="button" onclick="showScreen('main-screen')">Отмена</button>
     </div>
-    <!-- Кнопки для экрана подтверждения -->
     <div id="confirmation-buttons" class="control-group hidden">
       <a id="exchange-link" class="button" target="_blank">Обменять</a>
       <button class="button" onclick="showScreen('main-screen')">Отмена</button>
@@ -340,7 +332,6 @@
   </div>
 
   <script>
-    // Переключение экранов и групп кнопок
     function showScreen(screenId) {
       document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active-screen');
@@ -368,7 +359,6 @@
       }
     }
 
-    // Обработка транзакций покупки/продажи
     function processTransaction(type) {
       const amountInput = document.getElementById(`${type}-amount`);
       const amount = parseInt(amountInput.value);
@@ -383,7 +373,6 @@
       }
     }
 
-    // Функция для отображения уведомления
     function showToast(message) {
       const toast = document.createElement('div');
       toast.className = 'toast';
