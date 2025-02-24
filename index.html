@@ -125,6 +125,12 @@
       background: rgba(124, 77, 255, 0.05);
       box-shadow: 0 0 16px rgba(124, 77, 255, 0.2);
     }
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
     .confirmation-message {
       font-size: 1.2rem;
       margin: 2rem 0;
@@ -290,6 +296,10 @@
           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
           onkeydown="if(event.key === 'Enter') { processTransaction('buy'); }">
       </div>
+      <div class="button-row">
+        <button class="button" onclick="processTransaction('buy')">Продолжить</button>
+        <button class="button" onclick="showScreen('main-screen')">Отмена</button>
+      </div>
     </div>
     <!-- Экран продажи -->
     <div id="sell-screen" class="screen hidden">
@@ -304,6 +314,10 @@
           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
           onkeydown="if(event.key === 'Enter') { processTransaction('sell'); }">
       </div>
+      <div class="button-row">
+        <button class="button" onclick="processTransaction('sell')">Продолжить</button>
+        <button class="button" onclick="showScreen('main-screen')">Отмена</button>
+      </div>
     </div>
     <!-- Экран подтверждения -->
     <div id="confirmation-screen" class="screen hidden">
@@ -311,19 +325,11 @@
     </div>
   </div>
 
-  <!-- Блок с кнопками -->
+  <!-- Блок с кнопками главного и подтверждения экранов -->
   <div class="controls">
     <div id="main-buttons" class="control-group active">
       <button class="button" onclick="showScreen('buy-screen')">Купить EDVN</button>
       <button class="button" onclick="showScreen('sell-screen')">Продать EDVN</button>
-    </div>
-    <div id="buy-buttons" class="control-group hidden">
-      <button class="button" onclick="processTransaction('buy')">Продолжить</button>
-      <button class="button" onclick="showScreen('main-screen')">Отмена</button>
-    </div>
-    <div id="sell-buttons" class="control-group hidden">
-      <button class="button" onclick="processTransaction('sell')">Продолжить</button>
-      <button class="button" onclick="showScreen('main-screen')">Отмена</button>
     </div>
     <div id="confirmation-buttons" class="control-group hidden">
       <a id="exchange-link" class="button" target="_blank">Обменять</a>
@@ -347,8 +353,8 @@
       
       const mapping = {
         'main-screen': 'main-buttons',
-        'buy-screen': 'buy-buttons',
-        'sell-screen': 'sell-buttons',
+        'buy-screen': null,
+        'sell-screen': null,
         'confirmation-screen': 'confirmation-buttons'
       };
       const ctrlId = mapping[screenId];
